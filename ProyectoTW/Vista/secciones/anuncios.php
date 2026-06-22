@@ -14,6 +14,18 @@
                     <div class="cuerpo-tarjeta">
                         <h3><?php echo htmlspecialchars($anuncio['titulo']); ?></h3>
                         <p><?php echo htmlspecialchars($anuncio['descripcion']); ?></p>
+                        <?php if (!empty($anuncio['distrito_nombre'])): ?>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-map-marker-alt" style="color: var(--purpura-principal);"></i> 
+                                <?php 
+                                    $loc = htmlspecialchars($anuncio['distrito_nombre']);
+                                    if (!empty($anuncio['provincia_nombre'])) $loc .= ', ' . htmlspecialchars($anuncio['provincia_nombre']);
+                                    if (!empty($anuncio['departamento_nombre'])) $loc .= ' - ' . htmlspecialchars($anuncio['departamento_nombre']);
+                                    if (!empty($anuncio['direccionEspecifica'])) $loc .= ' (' . htmlspecialchars($anuncio['direccionEspecifica']) . ')';
+                                    echo $loc;
+                                ?>
+                            </p>
+                        <?php endif; ?>
                         <span class="etiqueta-estado estado-<?php echo $anuncio['estado']; ?>">
                             <?php echo ucfirst($anuncio['estado']); ?>
                         </span>
@@ -24,7 +36,10 @@
                                 data-titulo="<?php echo htmlspecialchars($anuncio['titulo'], ENT_QUOTES, 'UTF-8'); ?>"
                                 data-descripcion="<?php echo htmlspecialchars($anuncio['descripcion'], ENT_QUOTES, 'UTF-8'); ?>"
                                 data-estado="<?php echo $anuncio['estado']; ?>"
-                                data-ubicacion="<?php echo htmlspecialchars($anuncio['ubicacion'], ENT_QUOTES, 'UTF-8'); ?>"
+                                data-departamento_id="<?php echo $anuncio['idDepartamento'] ?? ''; ?>"
+                                data-provincia_id="<?php echo $anuncio['idProvincia'] ?? ''; ?>"
+                                data-distrito_id="<?php echo $anuncio['idDistrito'] ?? ''; ?>"
+                                data-direccion_especifica="<?php echo htmlspecialchars($anuncio['direccionEspecifica'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                 data-pago="<?php echo $anuncio['pagoReferencia']; ?>"
                                 data-modalidad="<?php echo $anuncio['modalidad']; ?>"
                                 data-tipo="<?php echo $anuncio['tipoAnuncio']; ?>"

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../Modelo/Model_Historial.php';
+require_once __DIR__ . '/../Core/session.php';
 
 class Con_Historial {
     private Model_Historial $modelo;
@@ -9,7 +10,8 @@ class Con_Historial {
     }
 
     public function obtenerHistorial() {
-        return $this->modelo->obtenerHistorialPostulaciones();
+        $idUsuario = obtenerIdUsuarioActivo();
+        return $this->modelo->obtenerHistorialPostulaciones($idUsuario);
     }
 }
 ?>

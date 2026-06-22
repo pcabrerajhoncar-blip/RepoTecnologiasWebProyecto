@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../Core/conexion.php';
+require_once __DIR__ . '/../Core/session.php';
 
 class Model_Postulacion {
     private $conn;
@@ -9,17 +10,17 @@ class Model_Postulacion {
         $this->conn = $Database->getConnection();
     }
 
-    public function obtenerPostulaciones() {
+    public function obtenerPostulaciones($idUsuario) {
         try {
             $stmt = $this->conn->prepare("
                 SELECT p.idPostulacion, p.estado, p.fecha, a.titulo AS puesto
                 FROM postulacion p
                 JOIN anuncio a ON p.idAnuncio = a.idAnuncio
-                WHERE p.idUsuario = 1
+                WHERE p.idUsuario = ?
                   AND (p.estado = 'Pendiente' OR p.fecha >= DATE_SUB(NOW(), INTERVAL 3 MONTH))
                 ORDER BY p.fecha DESC
             ");
-            $stmt->execute();
+            $stmt->execute([$idUsuario]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             error_log("Error al consultar postulaciones: " . $e->getMessage());

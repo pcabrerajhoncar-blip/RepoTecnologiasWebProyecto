@@ -1,8 +1,11 @@
 <?php
+require_once '../Core/session.php';
 require_once '../Controlador/Con_AnuncioCreado.php';
 require_once '../Controlador/Con_AnuncioGuardado.php';
 require_once '../Controlador/Con_Postulacion.php';
 require_once '../Controlador/Con_Historial.php';
+
+$idUsuarioActivo = obtenerIdUsuarioActivo();
 
 $conAnuncio = new Con_AnuncioCreado();
 $conGuardado = new Con_AnuncioGuardado();
@@ -11,6 +14,7 @@ $conHistorial = new Con_Historial();
 
 $mis_anuncios = $conAnuncio->obtenerAnuncios();
 $categorias = $conAnuncio->obtenerCategorias();
+$departamentos = $conAnuncio->obtenerDepartamentos();
 $mis_postulaciones = $conPostulacion->obtenerPostulaciones();
 $anuncios_favoritos = $conGuardado->obtenerAnunciosFavoritos();
 $historial_postulaciones = $conHistorial->obtenerHistorial();
@@ -27,6 +31,7 @@ $historial_postulaciones = $conHistorial->obtenerHistorial();
 </head>
 <body>
 
+<!-- ESTE HEADER SERA REEMPLAZADO LUEGO -->
 <!-- Header de la aplicación -->
     <header class="cabecera">
         <div class="logo"><i class="fas fa-bolt"></i> Chamba Ya</div>
@@ -42,8 +47,8 @@ $historial_postulaciones = $conHistorial->obtenerHistorial();
                 <input type="text" id="busqueda-global" placeholder="Buscar chamba..." oninput="filtrarAnuncios()">
             </div>
             <div class="perfil-usuario">
-                <div class="avatar-usuario">JD</div>
-                <span>Juan Doe</span>
+                <div class="avatar-usuario"><?php echo 'U' . $idUsuarioActivo; ?></div>
+                <span>Usuario #<?php echo $idUsuarioActivo; ?></span>
             </div>
         </div>
     </header>
@@ -100,15 +105,40 @@ $historial_postulaciones = $conHistorial->obtenerHistorial();
                 </div>
                 <div class="fila-formulario">
                     <div class="grupo-formulario">
-                        <label>Ubicación</label>
-                        <input type="text" name="ubicacion" id="ubicacion-chamba" placeholder="Ciudad o Distrito">
+                        <label>Departamento</label>
+                        <select name="departamento_id" id="departamento-chamba">
+                            <option value="">Seleccione Departamento</option>
+                            <?php foreach ($departamentos as $dep): ?>
+                                <option value="<?php echo $dep['idDepartamento']; ?>">
+                                    <?php echo htmlspecialchars($dep['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+                    <div class="grupo-formulario">
+                        <label>Provincia</label>
+                        <select name="provincia_id" id="provincia-chamba" disabled>
+                            <option value="">Seleccione Provincia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fila-formulario">
+                    <div class="grupo-formulario">
+                        <label>Distrito</label>
+                        <select name="distrito_id" id="distrito-chamba" disabled required>
+                            <option value="">Seleccione Distrito</option>
+                        </select>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label>Dirección Específica</label>
+                        <input type="text" name="direccion_especifica" id="direccion-especifica-chamba" placeholder="Ej: Av. Larco 123">
+                    </div>
+                </div>
+                <div class="fila-formulario">
                     <div class="grupo-formulario">
                         <label>Pago Referencial (S/.)</label>
                         <input type="number" name="pago" id="pago-chamba" placeholder="0.00">
                     </div>
-                </div>
-                <div class="fila-formulario">
                     <div class="grupo-formulario">
                         <label>Modalidad</label>
                         <select name="modalidad" id="modalidad-chamba">
@@ -116,6 +146,8 @@ $historial_postulaciones = $conHistorial->obtenerHistorial();
                             <option value="Virtual">Virtual</option>
                         </select>
                     </div>
+                </div>
+                <div class="fila-formulario">
                     <div class="grupo-formulario">
                         <label>Tipo de Anuncio</label>
                         <select name="tipo" id="tipo-chamba">

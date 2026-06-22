@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../Modelo/Model_AnuncioGuardado.php';
+require_once __DIR__ . '/../Core/session.php';
 
 class Con_AnuncioGuardado {
     private Model_AnuncioGuardado $modelo;
@@ -9,7 +10,8 @@ class Con_AnuncioGuardado {
     }
 
     public function obtenerAnunciosFavoritos() {
-        return $this->modelo->obtenerAnunciosFavoritos();
+        $idUsuario = obtenerIdUsuarioActivo();
+        return $this->modelo->obtenerAnunciosFavoritos($idUsuario);
     }
 }
 ?>

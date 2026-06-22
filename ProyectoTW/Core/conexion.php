@@ -2,7 +2,7 @@
 
 class DataBase {
     private $host = "localhost";
-    private $db = "bd_chambea_ya";
+    private $db = "bd_chambea_ya2";
     private $user = "root";
     private $pass = "";
     private $charset = 'utf8mb4';
